@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>SRD Intelligence System</title>
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+  >
+
+  <style>
+
+    /* ========================================
+       FILE UPLOAD PREVIEW
+    ======================================== */
+
+    .file-meta {
+      margin-top: 12px;
+      padding: 12px 14px;
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+
+      border-radius: 14px;
+
+      background:
+        rgba(255,255,255,0.03);
+
+      display: none;
+    }
+
+
+    .file-row {
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        center;
+
+      gap: 10px;
+
+      margin-bottom:
+        10px;
+    }
+
+
+    .file-name {
+      font-size:
+        13px;
+
+      color:
+        rgba(248,250,252,0.9);
+
+      word-break:
+        break-all;
+    }
+
+
+    .file-clear {
+      background:
+        rgba(255,255,255,0.06);
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+
+      color:
+        rgba(248,250,252,0.9);
+
+      padding:
+        6px 10px;
+
+      border-radius:
+        10px;
+
+      cursor:
+        pointer;
+
+      font-size:
+        12px;
+    }
+
+
+    .preview-wrap {
+      width:
+        100%;
+
+      overflow:
+        hidden;
+
+      border-radius:
+        14px;
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+
+      background:
+        rgba(0,0,0,0.25);
+    }
+
+
+    .preview-img {
+      width:
+        100%;
+
+      max-height:
+        260px;
+
+      object-fit:
+        contain;
+
+      display:
+        block;
+    }
+
+
+
+    /* ========================================
+       LIVE CAMERA
+    ======================================== */
+
+    .live-wrap {
+      display:
+        none;
+
+      margin-bottom:
+        15px;
+    }
+
+
+    .live-img {
+      width:
+        100%;
+
+      border-radius:
+        16px;
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+
+      box-shadow:
+        0 16px 30px rgba(0,0,0,0.35);
+
+      display:
+        block;
+
+      object-fit:
+        contain;
+    }
+
+
+    .live-label {
+      margin-bottom:
+        8px;
+
+      font-size:
+        12px;
+
+      opacity:
+        0.7;
+
+      text-transform:
+        uppercase;
+
+      letter-spacing:
+        1px;
+    }
+
+
+    .live-detection-info {
+      margin-top:
+        12px;
+
+      padding:
+        12px;
+
+      border-radius:
+        12px;
+
+      background:
+        rgba(255,255,255,0.04);
+
+      border:
+        1px solid rgba(255,255,255,0.1);
+
+      display:
+        none;
+    }
+
+
+    .detection-row {
+      display:
+        flex;
+
+      justify-content:
+        space-between;
+
+      padding:
+        4px 0;
+
+      font-size:
+        13px;
+    }
+
+
+    .yes {
+      color:
+        #22c55e;
+    }
+
+
+    .no {
+      color:
+        #ef4444;
+    }
+
+
+
+    /* ========================================
+       SECONDARY BUTTON
+    ======================================== */
+
+    .btn-secondary {
+      width:
+        100%;
+
+      padding:
+        14px;
+
+      background:
+        rgba(255,255,255,0.06);
+
+      color:
+        white;
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+
+      border-radius:
+        12px;
+
+      font-weight:
+        600;
+
+      cursor:
+        pointer;
+
+      transition:
+        0.3s;
+    }
+
+
+    .btn-secondary:hover {
+      border-color:
+        rgba(99,102,241,0.4);
+
+      transform:
+        scale(1.01);
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- ========================================
+       BACKGROUND
+  ======================================== -->
+
+  <div class="background-blobs">
+
+    <div class="blob blob-1"></div>
+
+    <div class="blob blob-2"></div>
+
+  </div>
+
+
+
+  <main class="app-container">
+
+
+    <!-- ========================================
+         HEADER
+    ======================================== -->
+
+    <header class="glass-header">
+
+      <div class="brand">
+
+        <div class="logo-sq">
+          <div class="inner-dot"></div>
+        </div>
+
+        <span class="brand-name">
+
+          SRD
+
+          <span class="thin">
+            Detect
+          </span>
+
+        </span>
+
+      </div>
+
+
+      <nav class="status-indicator">
+
+        <span class="pulse"></span>
+
+        System Active
+
+      </nav>
+
+    </header>
+
+
+
+    <!-- ========================================
+         HERO
+    ======================================== -->
+
+    <section class="hero">
+
+      <h1>
+        Smart SRD Analysis
+      </h1>
+
+      <p>
+        Advanced neural network processing
+        for real-time SRD identification.
+      </p>
+
+    </section>
+
+
+
+    <!-- ========================================
+         MAIN GRID
+    ======================================== -->
+
+    <div class="main-grid">
+
+
+      <!-- =====================================
+           STATIC IMAGE ANALYSIS
+      ====================================== -->
+
+      <div class="glass-card">
+
+        <div class="card-head">
+
+          <span class="icon">
+            📸
+          </span>
+
+          <h3>
+            Static Analysis
+          </h3>
+
+        </div>
+
+
+        <p class="card-desc">
+
+          Upload a student image to evaluate
+          SRD compliance
+          (collar, lanyard, and shoes).
+
+        </p>
+
+
+        <form
+          method="POST"
+          enctype="multipart/form-data"
+          class="upload-zone"
+        >
+
+
+          <input
+            type="file"
+            name="image"
+            id="file-upload"
+            accept="image/*"
+            hidden
+            required
+          >
+
+
+          <label
+            for="file-upload"
+            class="drop-area"
+            id="drop-area"
+          >
+
+            <span class="upload-icon">
+              ↑
+            </span>
+
+            <span
+              class="text-main"
+              id="drop-title"
+            >
+              Choose a file
+            </span>
+
+            <span
+              class="text-sub"
+              id="drop-sub"
+            >
+              or drag and drop here
+            </span>
+
+          </label>
+
+
+
+          <!-- Selected image preview -->
+
+          <div
+            class="file-meta"
+            id="file-meta"
+          >
+
+            <div class="file-row">
+
+              <div
+                class="file-name"
+                id="file-name"
+              >
+                No file selected
+              </div>
+
+
+              <button
+                type="button"
+                class="file-clear"
+                id="clear-btn"
+              >
+                Clear
+              </button>
+
+            </div>
+
+
+            <div class="preview-wrap">
+
+              <img
+                id="preview-img"
+                class="preview-img"
+                alt="Selected image preview"
+              >
+
+            </div>
+
+          </div>
+
+
+
+          <button
+            type="submit"
+            class="btn-primary"
+            id="analyze-btn"
+          >
+
+            Analyze Image
+
+          </button>
+
+
+        </form>
+
+      </div>
+
+
+
+
+      <!-- =====================================
+           LIVE BROWSER WEBCAM
+      ====================================== -->
+
+      <div class="glass-card">
+
+
+        <div class="card-head">
+
+          <span class="icon">
+            🎥
+          </span>
+
+          <h3>
+            Live Stream
+          </h3>
+
+        </div>
+
+
+        <p class="card-desc">
+
+          Real-time SRD detection using
+          your browser webcam.
+
+        </p>
+
+
+
+        <!-- Camera OFF -->
+
+        <div
+          class="video-placeholder"
+          id="video-placeholder"
+        >
+
+          <div class="scan-line"></div>
+
+          <span>
+            Camera is Off
+          </span>
+
+        </div>
+
+
+
+        <!-- RAW WEBCAM -->
+
+        <div
+          class="live-wrap"
+          id="camera-wrap"
+        >
+
+          <div class="live-label">
+            Camera Preview
+          </div>
+
+
+          <video
+            id="webcam"
+            class="live-img"
+            autoplay
+            playsinline
+            muted
+          >
+          </video>
+
+        </div>
+
+
+
+        <!-- Hidden capture canvas -->
+
+        <canvas
+          id="capture-canvas"
+          width="640"
+          height="480"
+          style="display:none;"
+        >
+        </canvas>
+
+
+
+        <!-- AI DETECTION RESULT -->
+
+        <div
+          class="live-wrap"
+          id="result-wrap"
+        >
+
+          <div class="live-label">
+            AI Detection
+          </div>
+
+
+          <img
+            id="detection-result"
+            class="live-img"
+            alt="SRD detection result"
+          >
+
+        </div>
+
+
+
+        <!-- LIVE STATUS -->
+
+        <div
+          id="live-status"
+          class="status-badge idle"
+          style="margin-top:15px;"
+        >
+
+          <span class="icon">
+            ⋯
+          </span>
+
+          Camera Off
+
+        </div>
+
+
+
+        <!-- Detection details -->
+
+        <div
+          class="live-detection-info"
+          id="live-detection-info"
+        >
+
+
+          <div class="detection-row">
+
+            <span>
+              Collar
+            </span>
+
+            <span id="collar-status">
+              -
+            </span>
+
+          </div>
+
+
+          <div class="detection-row">
+
+            <span>
+              Lanyard
+            </span>
+
+            <span id="lanyard-status">
+              -
+            </span>
+
+          </div>
+
+
+          <div class="detection-row">
+
+            <span>
+              Shoes
+            </span>
+
+            <span id="shoes-status">
+              -
+            </span>
+
+          </div>
+
+
+        </div>
+
+
+
+        <button
+          class="btn-primary"
+          type="button"
+          id="btn-camera"
+          style="margin-top:15px;"
+        >
+
+          Initialize Camera
+
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+
+    <!-- ========================================
+         STATIC IMAGE RESULTS
+    ======================================== -->
+
+    <section class="results-area">
+
+      <div class="results-card">
+
+
+        <div class="res-info">
+
+          <h4>
+            Analysis Result
+          </h4>
+
+
+
+          {% if error %}
+
+            <div class="status-badge idle">
+
+              <span class="icon">
+                ✖
+              </span>
+
+              {{ error }}
+
+            </div>
+
+
+
+          {% elif result %}
+
+
+            {% if result == "STUDENT COMPLIANT" %}
+
+              <div class="status-badge success">
+
+                <span class="icon">
+                  ✔
+                </span>
+
+                {{ result }}
+
+              </div>
+
+
+            {% else %}
+
+              <div class="status-badge idle">
+
+                <span class="icon">
+                  ✖
+                </span>
+
+                {{ result }}
+
+              </div>
+
+            {% endif %}
+
+
+
+          {% else %}
+
+            <div class="status-badge idle">
+
+              <span class="icon">
+                ⋯
+              </span>
+
+              Awaiting Input
+
+            </div>
+
+          {% endif %}
+
+        </div>
+
+
+
+        {% if output_url %}
+
+          <div style="margin-top:25px;">
+
+            <img
+              src="{{ output_url }}"
+              alt="SRD Result Image"
+
+              style="
+                max-width:100%;
+                border-radius:18px;
+                border:1px solid rgba(255,255,255,0.15);
+                box-shadow:0 20px 40px rgba(0,0,0,0.4);
+              "
+            >
+
+          </div>
+
+        {% endif %}
+
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+
+
+  <!-- ========================================
+       JAVASCRIPT
+  ======================================== -->
+
+  <script>
+
+
+    // ========================================
+    // STATIC FILE UPLOAD PREVIEW
+    // ========================================
+
+    const fileInput =
+      document.getElementById("file-upload");
+
+    const fileMeta =
+      document.getElementById("file-meta");
+
+    const fileNameEl =
+      document.getElementById("file-name");
+
+    const previewImg =
+      document.getElementById("preview-img");
+
+    const clearBtn =
+      document.getElementById("clear-btn");
+
+    const analyzeBtn =
+      document.getElementById("analyze-btn");
+
+    const dropTitle =
+      document.getElementById("drop-title");
+
+    const dropSub =
+      document.getElementById("drop-sub");
+
+
+
+    function resetPreview() {
+
+      fileInput.value = "";
+
+      fileMeta.style.display =
+        "none";
+
+      fileNameEl.textContent =
+        "No file selected";
+
+      previewImg.removeAttribute(
+        "src"
+      );
+
+      analyzeBtn.textContent =
+        "Analyze Image";
+
+      dropTitle.textContent =
+        "Choose a file";
+
+      dropSub.textContent =
+        "or drag and drop here";
+
+    }
+
+
+
+    fileInput.addEventListener(
+      "change",
+      () => {
+
+        const file =
+          fileInput.files &&
+          fileInput.files[0];
+
+
+        if (!file) {
+
+          resetPreview();
+
+          return;
+
+        }
+
+
+        fileNameEl.textContent =
+          file.name;
+
+
+        const previewUrl =
+          URL.createObjectURL(
+            file
+          );
+
+
+        previewImg.src =
+          previewUrl;
+
+
+        fileMeta.style.display =
+          "block";
+
+
+        analyzeBtn.textContent =
+          `Analyze: ${file.name}`;
+
+
+        dropTitle.textContent =
+          "File selected";
+
+
+        dropSub.textContent =
+          "Select another file to change it";
+
+      }
+    );
+
+
+
+    clearBtn.addEventListener(
+      "click",
+      resetPreview
+    );
+
+
+
+
+    // ========================================
+    // WEBCAM ELEMENTS
+    // ========================================
+
+    const btnCam =
+      document.getElementById(
+        "btn-camera"
+      );
+
+
+    const webcam =
+      document.getElementById(
+        "webcam"
+      );
+
+
+    const canvas =
+      document.getElementById(
+        "capture-canvas"
+      );
+
+
+    const context =
+      canvas.getContext(
+        "2d"
+      );
+
+
+    const cameraWrap =
+      document.getElementById(
+        "camera-wrap"
+      );
+
+
+    const resultWrap =
+      document.getElementById(
+        "result-wrap"
+      );
+
+
+    const resultImage =
+      document.getElementById(
+        "detection-result"
+      );
+
+
+    const placeholder =
+      document.getElementById(
+        "video-placeholder"
+      );
+
+
+    const liveStatus =
+      document.getElementById(
+        "live-status"
+      );
+
+
+    const detectionInfo =
+      document.getElementById(
+        "live-detection-info"
+      );
+
+
+    const collarStatus =
+      document.getElementById(
+        "collar-status"
+      );
+
+
+    const lanyardStatus =
+      document.getElementById(
+        "lanyard-status"
+      );
+
+
+    const shoesStatus =
+      document.getElementById(
+        "shoes-status"
+      );
+
+
+
+    let webcamStream =
+      null;
+
+
+    let running =
+      false;
+
+
+    let detectionTimer =
+      null;
+
+
+
+
+    // ========================================
+    // UPDATE INDIVIDUAL DETECTION STATUS
+    // ========================================
+
+    function updateItemStatus(
+      element,
+      detected
+    ) {
+
+      if (detected === "true") {
+
+        element.textContent =
+          "Detected";
+
+        element.className =
+          "yes";
+
+      }
+
+      else {
+
+        element.textContent =
+          "Not Detected";
+
+        element.className =
+          "no";
+
+      }
+
+    }
+
+
+
+
+    // ========================================
+    // START CAMERA
+    // ========================================
+
+    async function startCamera() {
+
+      try {
+
+
+        // Check browser support
+
+        if (
+          !navigator.mediaDevices ||
+          !navigator.mediaDevices.getUserMedia
+        ) {
+
+          throw new Error(
+            "Camera API unavailable. Use localhost or HTTPS."
+          );
+
+        }
+
+
+
+        webcamStream =
+          await navigator.mediaDevices.getUserMedia({
+
+            video: {
+
+              width: {
+                ideal: 640
+              },
+
+              height: {
+                ideal: 480
+              }
+
+            },
+
+            audio: false
+
+          });
+
+
+
+        webcam.srcObject =
+          webcamStream;
+
+
+
+        await webcam.play();
+
+
+
+        cameraWrap.style.display =
+          "block";
+
+
+        placeholder.style.display =
+          "none";
+
+
+        btnCam.textContent =
+          "Stop Camera";
+
+
+        liveStatus.className =
+          "status-badge success";
+
+
+        liveStatus.innerHTML =
+          '<span class="icon">●</span> Camera Active';
+
+
+
+        running =
+          true;
+
+
+
+        startDetection();
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(
+          "Camera error:",
+          error
+        );
+
+
+        liveStatus.className =
+          "status-badge idle";
+
+
+        liveStatus.innerHTML =
+          '<span class="icon">✖</span> '
+          + error.message;
+
+      }
+
+    }
+
+
+
+
+    // ========================================
+    // STOP CAMERA
+    // ========================================
+
+    function stopCamera() {
+
+
+      running =
+        false;
+
+
+
+      if (detectionTimer) {
+
+        clearTimeout(
+          detectionTimer
+        );
+
+        detectionTimer =
+          null;
+
+      }
+
+
+
+      if (webcamStream) {
+
+        webcamStream
+          .getTracks()
+          .forEach(
+            track => track.stop()
+          );
+
+
+        webcamStream =
+          null;
+
+      }
+
+
+
+      webcam.srcObject =
+        null;
+
+
+
+      cameraWrap.style.display =
+        "none";
+
+
+      resultWrap.style.display =
+        "none";
+
+
+      detectionInfo.style.display =
+        "none";
+
+
+      placeholder.style.display =
+        "grid";
+
+
+      btnCam.textContent =
+        "Initialize Camera";
+
+
+      liveStatus.className =
+        "status-badge idle";
+
+
+      liveStatus.innerHTML =
+        '<span class="icon">⋯</span> Camera Off';
+
+
+
+      if (
+        resultImage.dataset.objectUrl
+      ) {
+
+        URL.revokeObjectURL(
+          resultImage.dataset.objectUrl
+        );
+
+
+        delete resultImage.dataset.objectUrl;
+
+      }
+
+    }
+
+
+
+
+    // ========================================
+    // START DETECTION
+    // ========================================
+
+    function startDetection() {
+
+      if (!running) {
+        return;
+      }
+
+
+      captureAndDetect();
+
+    }
+
+
+
+
+    // ========================================
+    // CAPTURE + SEND FRAME TO FLASK
+    // ========================================
+
+    async function captureAndDetect() {
+
+
+      if (!running) {
+        return;
+      }
+
+
+
+      if (
+        webcam.readyState <
+        HTMLMediaElement.HAVE_CURRENT_DATA
+      ) {
+
+        scheduleNextFrame();
+
+        return;
+
+      }
+
+
+
+      /*
+       * 640x480 is used deliberately so that
+       * huge webcam frames are not uploaded
+       * to Flask every request.
+       */
+
+      canvas.width =
+        640;
+
+
+      canvas.height =
+        480;
+
+
+
+      context.drawImage(
+
+        webcam,
+
+        0,
+        0,
+
+        canvas.width,
+        canvas.height
+
+      );
+
+
+
+      canvas.toBlob(
+
+        async blob => {
+
+
+          if (!blob) {
+
+            scheduleNextFrame();
+
+            return;
+
+          }
+
+
+
+          const formData =
+            new FormData();
+
+
+
+          formData.append(
+
+            "frame",
+
+            blob,
+
+            "webcam.jpg"
+
+          );
+
+
+
+          try {
+
+
+            const response =
+              await fetch(
+
+                "/detect_frame",
+
+                {
+
+                  method:
+                    "POST",
+
+                  body:
+                    formData
+
+                }
+
+              );
+
+
+
+            if (!response.ok) {
+
+
+              let message =
+                "Detection failed";
+
+
+              try {
+
+                const errorData =
+                  await response.json();
+
+
+                if (
+                  errorData &&
+                  errorData.error
+                ) {
+
+                  message =
+                    errorData.error;
+
+                }
+
+              }
+
+              catch (_) {
+
+                // Response may not be JSON
+
+              }
+
+
+
+              throw new Error(
+                message
+              );
+
+            }
+
+
+
+            // ==============================
+            // READ AI RESULT HEADERS
+            // ==============================
+
+            const status =
+              response.headers.get(
+                "X-SRD-Status"
+              );
+
+
+            const compliant =
+              response.headers.get(
+                "X-SRD-Compliant"
+              );
+
+
+            const collar =
+              response.headers.get(
+                "X-SRD-Collar"
+              );
+
+
+            const lanyard =
+              response.headers.get(
+                "X-SRD-Lanyard"
+              );
+
+
+            const shoes =
+              response.headers.get(
+                "X-SRD-Shoes"
+              );
+
+
+
+            // ==============================
+            // UPDATE MAIN STATUS
+            // ==============================
+
+            if (
+              compliant === "true"
+            ) {
+
+              liveStatus.className =
+                "status-badge success";
+
+
+              liveStatus.innerHTML =
+                `<span class="icon">✔</span> ${status || "STUDENT COMPLIANT"}`;
+
+            }
+
+            else {
+
+              liveStatus.className =
+                "status-badge idle";
+
+
+              liveStatus.innerHTML =
+                `<span class="icon">✖</span> ${status || "NOT COMPLIANT"}`;
+
+            }
+
+
+
+            // ==============================
+            // UPDATE EACH SRD ITEM
+            // ==============================
+
+            updateItemStatus(
+              collarStatus,
+              collar
+            );
+
+
+            updateItemStatus(
+              lanyardStatus,
+              lanyard
+            );
+
+
+            updateItemStatus(
+              shoesStatus,
+              shoes
+            );
+
+
+            detectionInfo.style.display =
+              "block";
+
+
+
+            // ==============================
+            // DISPLAY PROCESSED IMAGE
+            // ==============================
+
+            const resultBlob =
+              await response.blob();
+
+
+
+            if (
+              resultImage.dataset.objectUrl
+            ) {
+
+              URL.revokeObjectURL(
+                resultImage.dataset.objectUrl
+              );
+
+            }
+
+
+
+            const imageUrl =
+              URL.createObjectURL(
+                resultBlob
+              );
+
+
+
+            resultImage.src =
+              imageUrl;
+
+
+            resultImage.dataset.objectUrl =
+              imageUrl;
+
+
+            resultWrap.style.display =
+              "block";
+
+
+
+          }
+
+          catch (error) {
+
+
+            console.error(
+              "Detection error:",
+              error
+            );
+
+
+            liveStatus.className =
+              "status-badge idle";
+
+
+            liveStatus.innerHTML =
+              '<span class="icon">✖</span> '
+              + error.message;
+
+          }
+
+
+
+          scheduleNextFrame();
+
+
+        },
+
+        "image/jpeg",
+
+        0.80
+
+      );
+
+    }
+
+
+
+
+    // ========================================
+    // NEXT DETECTION FRAME
+    // ========================================
+
+    function scheduleNextFrame() {
+
+
+      if (!running) {
+        return;
+      }
+
+
+      detectionTimer =
+        setTimeout(
+
+          captureAndDetect,
+
+          500
+
+        );
+
+    }
+
+
+
+
+    // ========================================
+    // CAMERA BUTTON
+    // ========================================
+
+    btnCam.addEventListener(
+
+      "click",
+
+      () => {
+
+
+        if (!running) {
+
+          startCamera();
+
+        }
+
+        else {
+
+          stopCamera();
+
+        }
+
+
+      }
+
+    );
+
+
+  </script>
+
+
+</body>
+
+</html>

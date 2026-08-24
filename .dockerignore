@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local Python environment
+.venv/
+venv/
+env/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+
+# Training datasets
+collar.v1i.yolov8/
+formal and non formal shoes.v1i.yolov8/
+Hijab Detection.v2i.yolov8/
+Lanyard2.v1i.yolov8/
+Lanyard3.v3i.yolov8/
+ktm-final.v1i.yolov8/
+
+# Training/evaluation output
+runs/
+runs_tensorflow/
+runs_evaluation/
+keras_evaluation_results/
+keras_test_results/
+pytorch_results/
+
+# Test images
+*.HEIC
+
+# Temporary/runtime files
+static/uploads/*
+static/results/*
+
+# Keep directories
+!static/uploads/.gitkeep
+!static/results/.gitkeep

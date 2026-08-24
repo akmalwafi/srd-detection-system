@@ -1,0 +1,7 @@
+Flask
+Werkzeug
+gunicorn
+numpy
+opencv-python-headless
+ultralytics==8.4.6
+tensorflow

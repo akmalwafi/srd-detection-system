@@ -1,0 +1,75 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+tensorflow_env/
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+*.key
+
+# IDE
+.idea/
+.vscode/
+
+# =========================
+# DATASETS - DO NOT PUSH
+# =========================
+Hijab Detection.v2i.yolov8/
+Lanyard2.v1i.yolov8/
+Lanyard3.v3i.yolov8/
+Lanyard_clean/
+Shoes.v2i.yolov8/
+collar.v1i.yolov8/
+formal and non formal shoes.v1i.yolov8/
+ktm-final.v1i.yolov8/
+lanyard_class_check/
+
+# =========================
+# TRAINING / EVALUATION OUTPUTS
+# =========================
+keras_evaluation_results/
+keras_test_results/
+pytorch_results/
+runs/
+runs_evaluation/
+runs_tensorflow/
+tensorflow_results/
+wandb/
+
+# Generated files
+tensorflow_test_result.jpg
+calibration_image_sample_data_*.npy
+
+# Archives
+*.tar.gz
+*.zip
+
+# Uploads/results
+uploads/
+results/
+web_outputs/
+static/uploads/
+static/results/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Downloadable pretrained YOLO weights
+yolov8n.pt
+yolo26n.pt
+
+test_images/

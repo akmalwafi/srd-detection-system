@@ -1,0 +1,21 @@
+description: Ultralytics best model trained on C:\Users\akmal\PycharmProjects\SRDDETECTION\collar.v1i.yolov8\data.yaml
+author: Ultralytics
+date: '2026-08-04T21:18:59.138900'
+version: 8.4.6
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 32
+task: detect
+batch: 1
+imgsz:
+- 640
+- 640
+names:
+  0: collar
+  1: nocollar
+args:
+  batch: 1
+  keras: false
+  int8: false
+  nms: false
+channels: 3
