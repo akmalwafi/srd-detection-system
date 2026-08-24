@@ -1,0 +1,79 @@
+name: Deploy SRD to Azure VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.AZURE_SSH_KEY }}
+          AZURE_HOST: ${{ secrets.AZURE_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/azure_key
+          chmod 600 ~/.ssh/azure_key
+          ssh-keyscan -H "$AZURE_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy to Azure VM
+        env:
+          AZURE_HOST: ${{ secrets.AZURE_HOST }}
+          AZURE_USER: ${{ secrets.AZURE_USER }}
+        run: |
+          ssh -i ~/.ssh/azure_key "$AZURE_USER@$AZURE_HOST" << 'EOF'
+
+          set -e
+
+          cd ~/srd-detection-system
+
+          echo "Pulling latest code..."
+          git pull origin main
+
+          echo "Building Docker image..."
+          docker build -t srd-detection:new .
+
+          echo "Removing old test container..."
+          docker rm -f srd-test 2>/dev/null || true
+
+          echo "Starting test container..."
+          docker run -d \
+            --name srd-test \
+            -p 127.0.0.1:5002:5001 \
+            srd-detection:new
+
+          sleep 15
+
+          echo "Testing new container..."
+          curl --fail http://127.0.0.1:5002 > /dev/null
+
+          echo "Test successful."
+
+          docker stop srd-test
+          docker rm srd-test
+
+          echo "Replacing production container..."
+          docker rm -f srd-container 2>/dev/null || true
+
+          docker tag srd-detection:new srd-detection:latest
+
+          docker run -d \
+            --name srd-container \
+            --restart unless-stopped \
+            -p 127.0.0.1:5001:5001 \
+            srd-detection:latest
+
+          sleep 10
+
+          echo "Checking production..."
+          curl --fail http://127.0.0.1:5001 > /dev/null
+
+          echo "Deployment successful."
+
+          docker image prune -f
+
+          EOF
